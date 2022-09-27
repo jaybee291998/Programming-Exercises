@@ -1,0 +1,79 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+<h1>{{message}}</h1>
+<div>
+	<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+		<a href="{{file_link}}" class="btn btn-primary btn-lg active">Files</a>
+		<a href="{{comment_link}}" class="btn btn-primary btn-lg">Comments</a>
+		{% if is_instructor %}
+			<a href="{{mark_link}}" class="btn btn-primary btn-lg">Mark</a>
+		{% endif %}
+	</div>
+
+	{% if late %}
+		<div class="alert alert-danger">
+			{% if is_instructor %}
+				<p>This student is late</p>
+			{% else %}
+				<p>You are late</p>
+			{% endif %}
+		</div>
+	{% endif %}
+
+	{% if graded %}
+		<div class='content-box'>
+			<h2>Mark: {{grade}}</h2>
+			<p><b>Remark:</b>{{remark}}</p>
+		</div>
+	{% else %}
+		<h2>No Grades Yet</h2>
+	{% endif %}
+
+	<!-- file form -->
+	{% if not is_instructor %}
+		{% if errors %}
+			{% for error in errors %}
+				<div class="alert alert-danger">
+					{{error}}
+				</div>
+			{% endfor %}
+		{% endif %}
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			<legend>File Upload</legend>
+			<fieldset>
+				{{fileform.as_p}}
+				<input type="submit" name="{{fileform.prefix}}" value="Add File" class="btn btn-primary" />	
+			</fieldset>		
+		</form>
+	{% endif %}
+
+	<!-- file list -->
+
+	<h3>Student File</h3>
+	<ul class="list-group">
+		{% for file in file_info %}
+			<li class="list-group-item">
+				<div class='profile-box'>
+					<div class="img">
+						<a href="{{file.1}}"><b>{{file.0}}</b></a>
+					</div>
+					<div class="name">
+						<small>{{file.2}}</small>
+					</div>
+						{% if not is_instructor %}
+							<div class="buttons">
+							    <a href="{{file.3}}" class='btn btn-danger' role='button'>delete</a>      
+							</div>
+						{% endif %}
+				</div>
+			</li>
+		{% endfor %}
+	</ul>
+	<a href="{{go_back_link}}" role='button' class="btn btn-success">Go back</a>
+
+	
+</div>
+
+{% endblock %}

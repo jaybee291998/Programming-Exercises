@@ -1,0 +1,121 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+<!-- 			<button type="button" class="btn btn-outline-primary"> Stream</button>
+			<button type="button" class="btn btn-outline-primary">Classwork</button>
+			<button type="button" class="btn btn-outline-primary">People</button>
+			<button type="button" class="btn btn-outline-primary">Grades</button> -->
+			<a href="{{stream_link}}" class="btn btn-primary btn-lg active">Stream</a>
+			<a href="{{classwork_link}}" class="btn btn-primary btn-lg">Classwork</a>
+			<a href="{{people_link}}" class="btn btn-primary btn-lg">People</a>
+			{% if is_instructor %}
+				
+				<a href="{{grade_link}}" class="btn btn-primary btn-lg">Grades</a>
+				<a href="{{change_banner_link}}" class="btn btn-primary btn-lg">Banner</a>
+				<button type="button" class="btn btn-danger btn-lg" data-toggle="modal" data-target="#id">Delete</button> 
+				<!-- Modal -->
+				<div class="modal fade" id="id" role="dialog">
+					<div class="modal-dialog">
+								    
+						<!-- Modal content-->
+						<div class="modal-content">
+							<div class="modal-header">
+								<button type="button" class="close" data-dismiss="modal">&times;</button>
+								<h4 class="modal-title">Delete Class</h4>
+							</div>
+							<div class="modal-body">
+								<!-- <p>Some text in the modal.</p> -->
+								<h4>Are you sure you want to delete your class '{{class.name}}'</h4>
+								<p>All lessons and Studentwork, together with there corresponding files will be permanently deleted. It will never be recored again.</p>
+								<p>If you are sure please proceed, you will be prompted to enter your password to finalize the deletion</p>
+							</div>
+							<div class="modal-footer">
+								<a href="{{delete_class_link}}" role='button' class="btn btn-danger">Proceed</a>
+								<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							</div>
+						</div>
+								      
+					</div>
+				</div>
+			{% endif %}
+		</div>
+
+		<!-- Class Banner -->
+		{% load static %}
+		<div class="banner" style="background-image: url({{class.lmsclassinfo.banner_bg.url}})">
+			<div class="txt">
+				<h2>{{class.name}}</h2>
+				<b>{{class.instructor.profile.get_fullname}}</b><br>			
+			</div>
+
+		</div>
+		{% if is_instructor %}
+			<div class="button-group">
+				<a href="{{add_announcement_link}}" role='button' class="btn btn-warning">Add Announcement</a>
+				<a href="{{add_lecture_link}}" role='button' class="btn btn-warning">Add Lecture</a>
+			</div>
+		{% endif %}
+		<div>
+			<h3>Lessons</h3>
+			<ul class="list-group">
+				{% for li in lessons_and_lecture_info %}
+<!-- 					<li class="list-group-item">
+						<div>
+							<a href="{{li.1}}">{{li.0}}</a>
+						</div>
+					</li> -->
+					{% if li.5 == 'lesson' %}
+						<li class="list-group-item">
+							<a href="{{li.1}}">
+							    <div class="flex-grid">
+							      <div class="col type">
+							        <!-- <p>Type</p> -->
+							        {% load static %}
+							        <!-- <p>{{li.2}}</p> -->
+							        {% if li.2 == 'QZ' %}
+							        	<img class="type-log" src="{% static 'media/logo/quiz-logo.png' %}">
+							        {% elif li.2 == 'AS' %}
+							        	<img class="type-log" src="{% static 'media/logo/assignment-logo.png' %}">
+							        {% elif li.2 == 'AC' %}
+							        	<img class="type-log" src="{% static 'media/logo/activity-logo.png' %}">
+							        {% else %}
+							        	<img class="type-log" src="{% static 'media/logo/exam-logo.png' %}">
+							        {% endif %}
+							      </div>
+							      <div class="col content">
+							        <p>{{li.0}}</p>
+							        <p>{{li.3}}</p>
+							      </div>
+							    </div>
+						    </a>
+						</li>
+					{% elif li.5 == 'lecture' %}
+						<li class="list-group-item">
+							<a href="{{li.1}}">
+								<div class='profile-box'>
+									<div class="img">
+										<img src="{{li.8}}" class="avatar">
+									</div>
+									<div class="name">
+										<b class='name'>{{li.7}}</b>
+										<p>{{li.4}}</p>
+									</div>
+								</div>
+							</a>
+							<div class="content-box">
+								<b>{{li.0}}</b>
+								<p>{{li.6}}</p>
+							</div>
+						</li>
+
+					{% endif %}
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+
+	
+	
+{% endblock %}

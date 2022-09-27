@@ -1,0 +1,173 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+<h1>{{message}}</h1>
+
+<div>
+	<ul class="list-group">
+<!-- 		<li class="list-group-item"><div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<a role="button" class="btn btn-link btn-block" data-toggle="collapse" data-target="#mark">
+							<div class="">
+							    <p>mark</p>                          
+							</div>
+						</a>                  
+					</h2>
+				</div>
+
+				<div id="mark" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					{% if graded %}
+						<h2>Mark: {{grade}}</h2>
+					{% else %}
+						<h2>No Grades Yet</h2>
+					{% endif %}
+				</div>
+			</div>
+		</div></li> -->
+
+		<!-- Files list -->
+		{% if graded %}
+			<h2>Mark: {{grade}}</h2>
+		{% else %}
+			<h2>No Grades Yet</h2>
+		{% endif %}
+
+		<li class="list-group-item"><div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<a role="button" class="btn btn-link btn-block" data-toggle="collapse" data-target="#files">
+							<div class="">
+							    <p>Files</p>                          
+							</div>
+						</a>                  
+					</h2>
+				</div>
+
+				<div id="files" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<h3>Student File</h3>
+					<ul class="list-group">
+						{% for file in file_info %}
+<!-- 							<li class="list-group-item"><a href="{{file.1}}">{{file.0}}</a>
+								 <small>{{file.2}}</small>
+							</li> -->
+							<li class="list-group-item">
+								<div class='profile-box'>
+						          <div class="img">
+						            <a href="{{file.1}}"><b>{{file.0}}</b></a>
+						          </div>
+						          <div class="name">
+						            <small>{{file.2}}</small>
+						          </div>
+						          {% if not is_instructor %}
+							          <div class="buttons">
+							            <a href="{{file.3}}" class='btn btn-danger' role='button'>delete</a>      
+							          </div>
+						          {% endif %}
+
+						        </div>
+							</li>
+						{% endfor %}
+					</ul>
+				</div>
+			</div>
+		</div></li>
+
+		<!-- File up;oad -->
+
+		<li class="list-group-item"><div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<a role="button" class="btn btn-link btn-block" data-toggle="collapse" data-target="#upload-files">
+							<div class="">
+
+								{% if not is_instructor %}
+									<p>File Upload</p>  
+								{% else %}
+									<p>Mark Student</p>
+								{% endif %}
+							                            
+							</div>
+						</a>                  
+					</h2>
+				</div>
+
+				<div id="upload-files" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					{% if not is_instructor %}
+						<form method="POST" enctype="multipart/form-data">
+							{% csrf_token %}
+							<legend>File Upload</legend>
+								{{fileform.as_p}}
+								<input type="submit" name="{{fileform.prefix}}" value="Add File" class="btn btn-primary" />
+							
+						</form>
+					{% else %}
+						<form method="POST">
+							{% csrf_token %}
+							<legend>Mark</legend>
+							<fieldset>
+								{{markform.as_p}}
+								<input type="submit" name="{{markform.prefix}}" value="Mark" class="btn btn-secondary" />
+							</fieldset>
+						</form>
+					{% endif %}
+				</div>
+			</div>
+		</div></li>
+
+	<!-- Commecnts -->
+		<li class="list-group-item"><div class="accordion" id="accordionExample">
+			<div class="card">
+				<div class="card-header" id="headingOne">
+					<h2 class="mb-0">
+						<a role="button" class="btn btn-link btn-block" data-toggle="collapse" data-target="#comment">
+							<div class="">
+							    <p>Comments</p>                          
+							</div>
+						</a>                  
+					</h2>
+				</div>
+
+				<div id="comment" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+					<div>
+						<h3>Private Comments</h3>
+						<ul class="list-group">
+							{% for comment in comment_info %}
+								<!-- <li><b>{{comment.0}}</b><p>{{comment.1}}</p><small>{{comment.2}}</small></li> -->
+								<li class="list-group-item">
+							        <div class='profile-box'>
+							          <div class="img">
+							            <img src="{{comment.3}}" class="avatar">
+							          </div>
+							          <div class="name">
+							            <b class='name'>{{comment.0}}</b>
+							          </div>
+							        </div>
+							         <div class="content-box">
+							           <p>{{comment.1}}</p>
+							         </div>
+							         <div class="content-box">
+							           <small>{{comment.2}}</small>
+							         </div>
+							    </li>
+							{% endfor %}
+						</ul>
+					</div>
+
+					<form method="POST">
+						{% csrf_token %}
+						<legend>Comment</legend>
+							{{commentform.as_p}}
+							<input type="submit" name="{{commentform.prefix}}" value="Comment" class="btn btn-success" />
+					</form>
+				</div>
+			</div>
+		</div></li>
+	</ul>
+	
+</div>
+
+{% endblock %}

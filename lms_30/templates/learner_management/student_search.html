@@ -1,0 +1,112 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div>
+		<h2 id="output"></h2>
+		<form method="POST" class="mb-5">
+			{% csrf_token %}
+			<legend>Student Search</legend>
+			<fieldset>
+				<div>
+					<label for="student_search">Student Name</label>
+					<input type="text" name="student_search" id="student_search" class="form-control" onkeyup="search(this)">
+				</div>
+			</fieldset>
+		</form>
+		<div id="output-div" class="container">
+			
+		</div>
+	</div>
+
+
+  <script type="text/javascript">
+  	const output = document.getElementById('output')
+  	// const result_table = document.getElementById('result-table')
+  	const outputDiv = document.getElementById('output-div')
+
+	// get the csrf token from the cookie
+	function getCookie(cookie_name){
+	  let cookieValue = null;
+	  if (document.cookie && document.cookie !== '') {
+	      const cookies = document.cookie.split(';');
+	      for (let i = 0; i < cookies.length; i++) {
+	          const cookie = cookies[i].trim();
+	          // Does this cookie string begin with the name we want?
+	          if (cookie.substring(0, cookie_name.length + 1) === (cookie_name + '=')) {
+	              cookieValue = decodeURIComponent(cookie.substring(cookie_name.length + 1));
+	              break;
+	          }
+	      }
+	  }
+	  return cookieValue;
+	}
+
+  	const search = async e =>{
+  		if(e.value.length>=1){
+  			let csrftoken = getCookie('csrftoken');
+	  		const res = await fetch('{{domain}}/lmsclass/get-search-result/',{
+	  			method:'POST',
+	  			headers:{
+	  				'Content-type':'application/json',
+	  				'X-CSRFToken':csrftoken
+	  			},
+	  			body:JSON.stringify({'search_input':e.value})
+	  		})
+	  		const data = await res.json()
+	  		console.log(data)
+	  		updateTable(data)
+  		}
+  	}
+
+  	const updateTable = table_data =>{
+  		outputDiv.innerHTML=''
+  		const result_table = document.createElement('table')
+  		const tableHeader = document.createElement('tr')
+  		const first_name = document.createElement('td')
+  		const last_name = document.createElement('td')
+  		const email = document.createElement('td')
+  		const course = document.createElement('td')
+  		const year = document.createElement('td')
+
+  		first_name.innerHTML = 'First Name'
+  		last_name.innerHTML = 'Last Name'
+  		email.innerHTML = 'Email'
+  		course.innerHTML = 'Course'
+  		year.innerHTML = 'Year'
+
+		tableHeader.appendChild(email)
+  		tableHeader.appendChild(first_name)
+  		tableHeader.appendChild(last_name)
+  		
+  		tableHeader.appendChild(course)
+  		tableHeader.appendChild(year)
+  		// tableHeader.appendChild(link)
+
+  		result_table.appendChild(tableHeader)
+  		result_table.classList.add('table', 'table-striped', 'table-bordered')
+
+  		const tbody = document.createElement('tbody')
+  		
+  		table_data.forEach(data =>{
+  			const new_row = document.createElement('tr')
+  			Object.keys(data).forEach(key=>{
+  				const new_element = document.createElement('td')
+  				// if(key=='invite_link'){
+  				// 	new_element.innerHTML = `<a href=${data[key]} role='button' class='btn btn-primary'>Invite</a>`
+  				// }
+  				// else{
+  				// 	new_element.innerHTML = data[key]
+  				// }
+  				new_element.innerHTML = data[key]
+  				
+  				// console.log(data[key])
+  				new_row.appendChild(new_element)
+  			})
+  			// result_table.appendChild(new_row)
+  			tbody.appendChild(new_row)
+  		})
+  		result_table.appendChild(tbody)
+  		outputDiv.appendChild(result_table)
+  	}
+  </script>
+{% endblock %}

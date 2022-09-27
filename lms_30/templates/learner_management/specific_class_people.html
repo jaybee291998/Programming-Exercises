@@ -1,0 +1,134 @@
+{% extends 'base3.html' %}
+{% load static %}
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+<!-- 			<button type="button" class="btn btn-outline-primary"> Stream</button>
+			<button type="button" class="btn btn-outline-primary">Classwork</button>
+			<button type="button" class="btn btn-outline-primary">People</button>
+			<button type="button" class="btn btn-outline-primary">Grades</button> -->
+			<a href="{{stream_link}}" class="btn btn-primary btn-lg">Stream</a>
+			<a href="{{classwork_link}}" class="btn btn-primary btn-lg">Classwork</a>
+			<a href="{{people_link}}" class="btn btn-primary btn-lg active">People</a>
+			{% if is_instructor %}
+				<a href="{{grade_link}}" class="btn btn-primary btn-lg">Grades</a>
+			{% endif %}
+		</div>
+		<!-- Class Banner -->
+		{% load static %}
+		<div class="banner" style="background-image: url({{class.lmsclassinfo.banner_bg.url}})">
+			<div class="txt">
+				<h2>{{class.name}}</h2>
+				<b>{{class.instructor.profile.get_fullname}}</b><br>			
+			</div>
+		</div>
+
+		<div>
+			<h2>Instructor</h2>
+			<hr>
+			 <div class='profile-box' id="{{instructor_info.0}}">
+	          <div class="img">
+	            <img src="{{instructor_info.0}}" class="avatar">
+	          </div>
+	          <div class="name">
+	            <p class='name'>{{instructor_info.1}}</p>
+	          </div>
+	        </div>
+
+	        <h2>Students</h2>
+	        <hr>
+	        {% if is_instructor %}
+	        <a href="{{invite_link}}" role='button' class="btn btn-primary mb-2">Invite Student +</a>
+	        {% endif %}
+	        <ul class="list-group">
+	        {% for si in students_info %}
+	        	<li class="list-group-item">
+		        	<div class='profile-box' id="{{si.0}}">
+			          <div class="img">
+			            <img src="{{si.0}}" class="avatar">
+			          </div>
+			          <div class="name">
+			            <p class='name'>{{si.1}}</p>
+			          </div>
+			          {% if is_instructor %}
+			          <div class="buttons">
+			            <!-- <a href="#" class='btn btn-danger' role='button' id="{{si.1}}">Unenroll</a>   -->
+			            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{si.2}}">unenroll</button> 
+						  <!-- Modal -->
+						  <div class="modal fade" id="{{si.2}}" role="dialog">
+						    <div class="modal-dialog">
+						    
+						      <!-- Modal content-->
+						      <div class="modal-content">
+						        <div class="modal-header">
+						          <button type="button" class="close" data-dismiss="modal">&times;</button>
+						          <h4 class="modal-title">Unenroll Student</h4>
+						        </div>
+						        <div class="modal-body">
+						          <!-- <p>Some text in the modal.</p> -->
+						          <h4>Are you sure you want to unenroll '{{si.1}}' to your class '{{class.name}}'?</h4>
+						        </div>
+						        <div class="modal-footer">
+						          <a href="{{si.3}}" role='button' class="btn btn-danger">Unenroll</a>
+						          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+						        </div>
+						      </div>
+						      
+						    </div>
+						  </div>         
+			          </div>
+			          {% endif %}
+			        </div>
+	        	</li>
+	        {% endfor %}
+	        </ul>
+
+	        <!-- display the pending students only to the instructor of the class -->
+	        {% if is_instructor %}
+	        	{% if not empty_pending_students %}
+		        <h2>Pending Students</h2>
+		        <hr>
+		        <ul class="list-group">
+		        {% for si in pending_students_info %}
+		        	<li class="list-group-item">
+			        	<div class='profile-box' id="{{si.0}}">
+				          <div class="img">
+				            <img src="{{si.0}}" class="avatar">
+				          </div>
+				          <div class="name">
+				            <p class='name'>{{si.1}}</p>
+				          </div>
+				          <div class="buttons">
+				            <a href="{{si.2}}" class='btn btn-success' role='button'>accept</a>            
+				          </div>
+				        </div>
+		        	</li>
+		        {% endfor %}
+		        </ul>
+		        {% endif %}
+		        {% if not empty_invited_students %}
+		        <h2>Invited Students</h2>
+		        <hr>
+		        <ul class="list-group">
+		        {% for si in invited_students_info %}
+		        	<li class="list-group-item">
+			        	<div class='profile-box' id="{{si.0}}">
+				          <div class="img">
+				            <img src="{{si.0}}" class="avatar">
+				          </div>
+				          <div class="name">
+				            <p class='name'>{{si.1}}</p>
+				          </div>
+<!-- 				          <div class="buttons">
+				            <a href="{{si.2}}" class='btn btn-success' role='button'>accept</a>            
+				          </div> -->
+				        </div>
+		        	</li>
+		        {% endfor %}
+		        </ul>
+		        {% endif %}
+	        {% endif %}
+		</div>
+	</div>
+	
+{% endblock %}

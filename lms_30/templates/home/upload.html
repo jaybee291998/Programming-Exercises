@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<form method="post" enctype="multipart/form-data">
+	{% csrf_token %}
+	<fieldset>
+		{{form.as_p}}
+		<!-- <input type="file" name="document"> -->
+		<button type="submit">Upload File</button>	
+	</fieldset>
+</form>
+<!-- <h3>File Info</h3>
+<b>Name: </b>{{file_name}}<br>
+<b>Size: </b>{{file_size}} mb<br>
+<b>Type: </b>{{file_type}}<br>
+<b>Type: </b><a href="{{file_url}}">{{file_name}}</a><br> -->
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Add files for: {{title}}</legend>
+			{{form.as_p}}
+		</fieldset>
+		<button type="submit" class="btn btn-secondary btn-lg">save</button>
+	</form>
+	<hr>
+	<b>Lecture Files</b>
+	{% if errors %}
+		{% for error in errors %}
+			<div class="alert alert-danger">
+				{{error}}
+			</div>
+		{% endfor %}
+	{% endif %}
+	<ul class='list-group'>
+		{% for lfi in lecture_files_info %}
+			<!-- <li><a href="{{lfi.1}}" class='list-group-item'>{{lfi.0}}</a></li> -->
+			 <div class='profile-box'>
+	          <div class="img">
+	            <a href="{{lfi.1}}"><b>{{lfi.0}}</b></a>
+	          </div>
+	          <div class="buttons">
+	            <a href="{{lfi.2}}" class='btn btn-danger' role='button'>delete</a>            
+	          </div>
+	        </div>
+	        <!-- <p>{{lfi.2}}</p> -->
+		{% endfor %}
+	</ul>
+	<a href="{{lecture_link}}" role='button' class="btn btn-success">Go back to lecture</a>
+{% endblock %}

@@ -1,0 +1,104 @@
+{% extends 'base3.html' %}
+{% block content %}
+<div>
+	<div class="flex-grid">
+		<div class='type content-box'>
+			{% load static %}
+						        
+<!-- 			{% if lesson.type_of_lesson == 'QZ' %}
+				<img class="type-log" src="{% static 'media/logo/quiz-logo.png' %}">
+			{% else %}
+				<img class="type-log" src="{% static 'media/logo/exam-logo.png' %}">
+			{% endif %} -->
+			<img class="type-log" src="{% static 'media/logo/exam-logo.png' %}">
+		</div>
+		<div class="content content-box lesson-header">
+			<h2>{{lecture.type_of_lecture}}: {{lecture.title}}</h2>
+		</div>
+	</div>
+	<p class="text-muted">{{instructor_name}} &middot; {{lecture.timestamp}}</p>
+	<hr>
+	
+	
+	<p>{{lecture.description}}</p>
+
+	<div class='content-box'>
+		<b>Files:</b>
+		<ul class="list-group">
+			{% for lfi in lecture_files_info %}
+				<li><a href="{{lfi.1}}"  class="list-group-item">{{lfi.0}}</a></li>
+			{% endfor %}
+		</ul>
+		{% if is_class_instructor %}
+		{% if lecture.type_of_lecture == 'lecture' %}
+			<a href="{{add_lecture_file_link}}" role='button' class="btn btn-primary">Add lecture file</a>
+		{% endif %}
+		
+		<a href="{{edit_lecture_link}}" role='button' class="btn btn-success">Edit</a>
+
+
+		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id">Delete</button> 
+		<!-- Modal -->
+		<div class="modal fade" id="id" role="dialog">
+			<div class="modal-dialog">
+						    
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Delete {{lecture.type_of_lesson}}</h4>
+					</div>
+					<div class="modal-body">
+						<!-- <p>Some text in the modal.</p> -->
+						<h4>Are you sure you want to delete '{{lecture.type_of_lecture}}: {{lecture.title}}'</h4>
+						<p>All the files will be deleted, it will never be recorvered again.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="{{delete_lecture_link}}" role='button' class="btn btn-danger">Delete</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+						      
+			</div>
+		</div> 
+
+		{% endif %}
+		<a href="{{go_back_link}}" role='button' class="btn btn-warning">Go Back</a> 
+	</div>
+
+	<div>
+		<h3>Public Comments</h3>
+		<ul class="list-group">
+			{% for comment in comment_info %}
+				<li class="list-group-item">
+					<div class='profile-box'>
+						<div class="img">
+							<img src="{{comment.3}}" class="avatar">
+						</div>
+						<div class="name">
+							<b class='name'>{{comment.0}}</b>
+						</div>
+					</div>
+					<div class="content-box">
+						<p>{{comment.1}}</p>
+					</div>
+					<div class="content-box">
+						<small>{{comment.2}}</small>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<form method="POST">
+		{% csrf_token %}
+		<legend>Comment</legend>
+			{{commentform.as_p}}
+			<input type="submit" name="{{commentform.prefix}}" value="Comment" class="btn btn-success" />
+	</form>
+
+	
+</div>
+
+</div>
+{% endblock %}

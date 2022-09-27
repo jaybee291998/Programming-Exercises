@@ -1,0 +1,39 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+
+    <style>
+      table,
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid black;
+        border-collapse: collapse;
+      }
+    </style>
+<h3>
+	<ul>
+	{% for m in message %}
+		<li>{{m}}</li>
+	{% endfor %}
+	</ul>
+</h3>
+
+	<table>
+		<tr>
+			<th>Blank</th>
+			{% for lesson in class_lessons %}
+				<th>{{lesson.title}}</th>
+			{% endfor %}
+		</tr>
+
+		{% for student_grade in students_grades %}
+			<tr>
+				<!-- <td>Blank</td> -->
+				{% for mark in student_grade %}
+					<td>{{mark}}</td>
+				{% endfor %}
+			</tr>
+		{% endfor %}
+	</table>
+{% endblock %}

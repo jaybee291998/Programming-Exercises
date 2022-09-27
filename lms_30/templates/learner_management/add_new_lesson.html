@@ -1,0 +1,122 @@
+{% extends 'base3.html' %}
+{% load widget_tweaks %}
+{% block content %}
+	<ul>
+		{% if errors %}
+			<div class="alert alert-danger">
+				{% for error in errors %}
+					<li>{{error}}</li>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</ul>
+
+
+	<ul>
+	{% for s in sucess %}
+		<li>{{s}}</li>
+	{% endfor %}
+	</ul>
+	<form method="post">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Add Lesson Form</legend>
+			<!-- {{form.as_p}} -->
+			<!-- name -->
+			<div class="form-group">
+				{{form.title.errors}}
+				{{form.title.label_tag}}
+				{{form.title}}
+				
+			</div>
+			<!-- description-->
+			<div class="form-group">
+				{{form.description.errors}}
+				{{form.description.label_tag}}
+				{{form.description}}
+				
+			</div>
+
+			<div class="form-group">
+				{{form.type_of_lesson.errors}}
+				{{form.type_of_lesson.label_tag}}
+				<!-- {{form.type_of_lesson}} -->
+				{% render_field form.type_of_lesson onChange='myFun(this)' class='form-select'%}
+				
+				
+			</div>
+
+			<!-- total mark-->
+			<div class="form-group">
+				{{form.total_mark.errors}}
+				{{form.total_mark.label_tag}}
+				{{form.total_mark}}
+				
+			</div>
+
+			<!-- term -->
+			<div class="form-group">
+				{{form.term.errors}}
+				{{form.term.label_tag}}
+				{{form.term}}
+				<!-- {% render_field form.type_of_lesson onChange='myFun(this)' class='form-select'%} -->
+				
+			</div>
+
+
+			<div class="form-group" id='deadlineDiv'>
+				{{form.deadline.errors}}
+				{{form.deadline.label_tag}}
+				<!-- {{form.deadline}} -->
+				{% render_field form.deadline%}
+				
+			</div>
+		</fieldset>	
+		<button type="submit" class="btn btn-success btn-lg" id='btn'>Add Lesson</button>
+	</form>
+
+	<script type="text/javascript">
+		const lesson_type = document.getElementById('id_type_of_lesson');
+
+		const deadlineField = document.getElementById('deadlineDiv');
+
+		const deadline = document.getElementById('id_deadline');
+
+		const button = document.getElementById('btn');
+
+		const numberLabel = document.getElementById('number-label')
+		const numberField = document.getElementById('id_num')
+		button.textContent = 'Add Quiz';
+		// deadlineDiv.style.display='none';
+
+		// deadline.defaultValue = new Date(new Date().toString().split('GMT')[0]+' UTC').toISOString().split('.')[0];
+		// deadline.disabled = true;
+
+		function myFun(e) {
+
+			switch(e.value){
+				case 'QZ':
+					button.textContent = 'Add Quiz'
+					numberLabel.textContent='Quiz no.'
+					numberField.placeholder = 'quiz num'
+					break;
+				case 'AS':
+					button.textContent = 'Add Assignment'
+					numberLabel.textContent='Assignment no.'
+					numberField.placeholder = 'assignment num'
+					break;
+				case 'AC':
+					button.textContent = 'Add Activity'
+					numberLabel.textContent='Activity no.'
+					numberField.placeholder = 'activity num'
+					break;
+				case 'EX':
+					button.textContent = 'Add Exam'
+					numberLabel.textContent='Exam no.'
+					numberField.placeholder = 'exam num'
+					break;
+			}
+		}
+
+	</script>
+{% endblock %}

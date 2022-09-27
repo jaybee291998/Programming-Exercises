@@ -1,0 +1,39 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+<h1>{{message}}</h1>
+
+<div>
+	<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+		<a href="{{file_link}}" class="btn btn-primary btn-lg ">Files</a>
+		<a href="{{comment_link}}" class="btn btn-primary btn-lg">Comments</a>
+		{% if is_instructor %}
+			<a href="{{mark_link}}" class="btn btn-primary btn-lg active">Mark</a>
+		{% endif %}
+	</div>
+	{% if late %}
+		<div class="alert alert-danger">
+			<p>This student is late</p>
+		</div>
+	{% endif %}
+	<!-- Files list -->
+	{% if graded %}
+		<h2>Mark: {{grade}}</h2>
+	{% else %}
+		<h2>No Grades Yet</h2>
+	{% endif %}
+
+	<!-- Makr -->
+	<form method="POST">
+		{% csrf_token %}
+		<legend>Mark</legend>
+		<fieldset>
+			{{markform.as_p}}
+			<input type="submit" value="Mark" class="btn btn-secondary" />
+		</fieldset>
+	</form>
+
+	
+</div>
+
+{% endblock %}

@@ -1,0 +1,43 @@
+{% extends 'admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+	<ul>
+		{% if errors %}
+			<div class="alert alert-danger">
+				{% for error in errors %}
+					<li>{{error}}</li>
+				{% endfor %}
+			</div>
+		{% endif %}
+	</ul>
+
+
+	<ul>
+	{% for s in sucess %}
+		<li>{{s}}</li>
+	{% endfor %}
+	</ul>
+	<form method="post">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Add Announcement Form</legend>
+			<!-- {{form.as_p}} -->
+			<!-- name -->
+			<div class="form-group">
+				{{form.title.errors}}
+				{{form.title.label_tag}}
+				{{form.title}}
+				
+			</div>
+			<!-- description-->
+			<div class="form-group">
+				{{form.description.errors}}
+				{{form.description.label_tag}}
+				{{form.description}}
+				
+			</div>
+
+		</fieldset>	
+		<button type="submit" class="btn btn-success btn-lg" id='btn'>Add Announcement</button>
+	</form>
+{% endblock %}

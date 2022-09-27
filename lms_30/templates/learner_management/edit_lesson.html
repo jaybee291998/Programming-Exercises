@@ -1,0 +1,79 @@
+{% extends 'base3.html' %}
+{% load widget_tweaks %}
+{% block content %}
+	<h2>Edit Lesson {{lesson.title}}</h2>
+
+	<div class="content-box">
+		{% for message in messages %}
+			<div class="alert alert-success">
+				{{message}}
+			</div>
+		{% endfor %}
+
+		{% for error in errors %}
+			<div class="alert alert-danger">
+				{{error}}
+			</div>
+		{% endfor %}
+	</div>
+	
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Edit Lesson Form</legend>
+			<!-- {{form.as_p}} -->
+			<!-- name -->
+			<div class="form-group">
+				{{form.title.errors}}
+				{{form.title.label_tag}}
+				{{form.title}}
+				
+			</div>
+			<!-- description-->
+			<div class="form-group">
+				{{form.description.errors}}
+				{{form.description.label_tag}}
+				{{form.description}}
+				
+			</div>
+
+			<div class="form-group">
+				{{form.type_of_lesson.errors}}
+				{{form.type_of_lesson.label_tag}}
+				<!-- {{form.type_of_lesson}} -->
+				{% render_field form.type_of_lesson onChange='myFun(this)' class='form-select'%}
+				
+				
+			</div>
+
+			<!-- total mark-->
+			<div class="form-group">
+				{{form.total_mark.errors}}
+				{{form.total_mark.label_tag}}
+				{{form.total_mark}}
+				
+			</div>
+
+
+			<!-- term -->
+			<div class="form-group">
+				{{form.term.errors}}
+				{{form.term.label_tag}}
+				{{form.term}}
+				<!-- {% render_field form.type_of_lesson onChange='myFun(this)' class='form-select'%} -->
+				
+			</div>
+
+
+<!-- 			<div class="form-group" id='deadlineDiv'>
+				{{form.deadline.errors}}
+				{{form.deadline.label_tag}}
+				{{form.deadline}}
+				{% render_field form.deadline%}
+				
+			</div> -->
+		</fieldset>	
+		<button type="submit" class="btn btn-success btn-lg" id='btn'>Update Lesson</button>
+		
+	</form>
+{% endblock %}

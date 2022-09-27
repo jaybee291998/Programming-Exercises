@@ -1,0 +1,49 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class="container">
+		<!-- <ul> -->
+			{% if is_instructor %}
+				<a href="{{create_class_link}}" class="btn btn-success">Create Class</a>
+			{% endif %}
+			<div class="wrapper">
+			{% for ci in class_info %}
+
+				<!-- <li><a href="{{ci.1}}">{{ci.0.description}}</a></li> -->
+<!-- 				<div class="classes-div wrapper">
+				  <div class="card-body">
+				    <div class="classes-header">
+				      <h4 class="card-title"><a href="{{ci.1}}">{{ci.0.name}}</a></h4>
+				      <h5 class="card-subtitle mb-2 text-muted">class code</h5>
+				      <h6 class="card-subtitle mb-2 text-muted">{{ci.2}}</h6>  
+				    </div>
+				    <hr>
+				    <div class='upcoming-activities'>
+				      <p class="card-text">Upcoming activities</p>
+				      <p class="card-text">date</p>
+				    </div>
+				 </div> -->
+				 	{% load static %}
+				 	<div class='box card' id="{{ci.0.name}}" style="background-image: url({{ci.3}})">
+				 		<div class="classes-header flex flex-box">
+				 			<h3 class="card-title"><a href="{{ci.1}}">{{ci.0.name}}</a></h4>
+				      		<h5 class="card-subtitle mb-2"><b>{{ci.2}}</b></h6> 
+				 		</div>
+				 		<hr>
+				 		<div class="upcoming-activities flex flex-box">
+				 			<a href="{{ci.5}}">
+						    <h5 class="card-text"><b>{{ci.4.title}}</b></h6>
+						   	<h5 class="card-text"><b>{{ci.4.deadline}}</b></h6>
+						   	</a>
+						   	<!-- <p></p> -->
+				 		</div>
+				 	</div>
+<!-- 				 	<div class='box'>
+				 		Lorem ipsum dolor sit, amet consectetur adipisicing elit. Delectus quia deserunt voluptas nihil pariatur corporis tempora cumque eos ducimus a.
+				 	</div> -->
+				 	
+			{% endfor %}
+		</div>
+		<!-- </ul> -->
+	</div>
+{% endblock %}

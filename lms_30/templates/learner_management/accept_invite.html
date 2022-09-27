@@ -1,0 +1,21 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<p><b>Class ID: </b>{{class_id}}</p><br>
+	<p><b>Class Token: </b>{{class_token}}</p><br>
+	<p><b>Student ID: </b>{{student_id}}</p><br>
+	<ul>
+		<div class="alert alert-danger">
+			{% for error in errors %}
+				<li>{{error}}</li>
+			{% endfor %}
+		</div>
+	</ul>
+
+	<ul>
+		{% for s in sucess %}
+			<li>{{s}}</li>
+		{% endfor %}
+	</ul>
+
+{% endblock %}

@@ -1,0 +1,17 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class="container">
+		<h1>Create class view</h1>
+		<form method="post">
+			{% csrf_token %}
+			<fieldset>
+				<legend>Create Class</legend>
+
+				{{form.as_p}}
+			</fieldset>
+			<button type="submit" class='btn btn-primary btn-lg'>create class</button>
+		</form>
+	</div>
+
+{% endblock %}

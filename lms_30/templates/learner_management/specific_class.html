@@ -1,0 +1,50 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+<!-- 			<button type="button" class="btn btn-outline-primary"> Stream</button>
+			<button type="button" class="btn btn-outline-primary">Classwork</button>
+			<button type="button" class="btn btn-outline-primary">People</button>
+			<button type="button" class="btn btn-outline-primary">Grades</button> -->
+			<a href="#" class="btn btn-primary btn-lg active">Stream</a>
+			<a href="#" class="btn btn-primary btn-lg">Classwork</a>
+			<a href="#" class="btn btn-primary btn-lg">People</a>
+			<a href="#" class="btn btn-primary btn-lg">Grades</a>
+		</div>
+
+		<!-- Class Banner -->
+		<div class="banner">
+			<h2>{{class.name}}</h2>
+			<b>{{class.instructor}}</b><br>
+		</div>
+		<table>
+			<tr>
+				<th>Email</th>
+				<th>Name</th>
+			</tr>
+			{% for student in students %}
+				<tr>
+					<td>{{student.email}}</td>
+					<td>{{student.profile.first_name}}</td>
+				</tr>
+			{% endfor %}
+		</table>
+		<div>
+			<h3>Lessons</h3>
+			<ul>
+				{% for li in lessons_info %}
+					<li><a href="{{li.1}}">{{li.0}}</a></li>
+				{% endfor %}
+			</ul>
+		</div>
+		<ul>
+			<li><a href="{{invite_link}}">invite_link</a></li>
+			<li><a href="{{add_new_lesson_link}}">add new lesson</a></li>
+			<li><a href="{{grade_sheet_link}}">grade sheet</a></li>
+		</ul>
+	</div>
+
+	
+	
+{% endblock %}

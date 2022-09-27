@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title%}
+	{{ title }}
+{% endblock %}
+
+{% block header %}
+	{{ title }}
+{% endblock %}
+
+
+{% block content %}
+	<p>{{errors}}</p>
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset>
+			{{form.as_p}}
+		</fieldset>
+		<button type="submit" name="confirm">confirm</button>
+	</form>
+{% endblock %}

@@ -1,0 +1,20 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class="content-box">
+		{% for message in messages %}
+			<div class="alert alert-success">
+				{{message}}
+			</div>
+		{% endfor %}
+
+		{% for error in errors %}
+			<div class="alert alert-danger">
+				{{error}}
+			</div>
+		{% endfor %}
+
+		<a href="{{go_back_link}}" role='button' class="btn btn-success">go back</a>
+	</div>
+
+{% endblock %}

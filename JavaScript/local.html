@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>Local Storage Demo</title>
+</head>
+<body>
+	<h1>Local Storage Demo</h1>
+	<textarea id="my-textarea">
+		
+	</textarea>
+	<button id="my-btn">clear</button>
+</body>
+<script type="text/javascript">
+	let textArea = document.getElementById("my-textarea");
+	let clearBtn = document.getElementById('my-btn');
+	function saveOnStorage(){
+		let text = textArea.value;
+		localStorage.setItem('text', text);
+	}
+	function loadOnStorage(){
+		textArea.value = localStorage.getItem("text");
+	}
+	function clear(){
+		localStorage.setItem('text', '');
+		loadOnStorage();
+	}
+
+	loadOnStorage();
+	textArea.oninput = saveOnStorage;
+	clearBtn.onclick = clear;
+</script>
+</html>

@@ -1,0 +1,9 @@
+{% extends 'base2.html' %}
+
+{% block content %}
+	{% if confirmation_success %}
+		<p>Your account has already been confirmed you can now login <a href="{{login_link}}">here</a></p>
+	{% else %}
+		<p>This link is invalid or the link has already been used</p>
+	{% endif %}
+{% endblock %}

@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+	<title>
+		{% block title %}
+			title here
+		{% endblock %}
+
+	</title>
+	{% load static %}
+	<link href='{% static "css/bootstrap.min.css" %}' rel="stylesheet">
+	<link href='{% static "css/signin.css" %}' rel="stylesheet">
+	<style type="text/css">
+	    .demo-bg {
+	      opacity: 0.4;
+	      position: absolute;
+	      left: 0;
+	      top: 0;
+	      width: 100%;
+	      height: 100%;
+	    }
+
+	    .demo-content {
+	      position: relative;
+	    }
+	    .demo-wrap {
+	      overflow: hidden;
+	      position: relative;
+	    }
+	</style>
+	<!-- <link rel="stylesheet" href="//code.jquery.com/ui/1.12.1/themes/base/jquery-ui.css"> -->
+</head>
+<body class='text-center'>
+<div class="">
+  <img src="{%static 'media/core-bg.jpeg' %}" class="demo-bg">
+	<div class="demo-content alert alert-success">
+		{% block content %}
+			contents here
+		{% endblock %}
+	</div>
+</div>
+</body>
+</html>

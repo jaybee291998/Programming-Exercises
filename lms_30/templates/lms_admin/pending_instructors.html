@@ -1,0 +1,92 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+			<a href="{{announcements_link}}" class="btn btn-primary btn-lg">Announcements</a>
+			<a href="{{instructors_link}}" class="btn btn-primary btn-lg">Instructors</a>
+			<a href="{{pending_instructors_link}}" class="btn btn-primary btn-lg active">Pending Instructors</a>
+		</div>
+		<!-- Class Banner -->
+		{% load static %}
+
+		<div>
+			<h2>Admins</h2>
+			<hr>
+			{% for admin in admins_info %}
+				<div class='profile-box'>
+		          <div class="img">
+		            <a href="{{admin.0}}"><img src="{{admin.0}}" class="avatar"></a>
+		          </div>
+		          <div class="name">
+		            <p class='name'>{{admin.1}}</p>
+		          </div>
+		        </div>
+			{% endfor %}
+		        <h2>Pending Instructors</h2>
+		        <hr>
+		        <ul class="list-group">
+		        {% for pending_instructor in pending_instructors_info_sp %}
+		        	<li class="list-group-item">
+			        	<div class='profile-box'>
+				          <div class="img">
+				            <a href="{{pending_instructor.0}}"><img src="{{pending_instructor.0}}" class="avatar"></a>
+				          </div>
+				          <div class="name">
+				            <p class='name'>{{pending_instructor.1}}</p>
+				          </div>
+				          <div class="buttons">
+				            <a href="{{pending_instructor.3}}" class='btn btn-success' role='button'>accept</a> 
+
+				            <button type="button" class="btn btn-danger" data-toggle="modal" data-target="#{{pending_instructor.2}}">deny</button> 
+							  <!-- Modal -->
+							  <div class="modal fade" id="{{pending_instructor.2}}" role="dialog">
+							    <div class="modal-dialog">
+							    
+							      <!-- Modal content-->
+							      <div class="modal-content">
+							        <div class="modal-header">
+							          <button type="button" class="close" data-dismiss="modal">&times;</button>
+							          <h4 class="modal-title">Deny Instructorship Request</h4>
+							        </div>
+							        <div class="modal-body">
+							          <!-- <p>Some text in the modal.</p> -->
+							          <h4>Are you sure you want to deny instructorship to '{{instructor.1}}'?</h4>
+							        </div>
+							        <div class="modal-footer">
+							          <a href="{{pending_instructor.4}}" role='button' class="btn btn-danger">Deny</a>
+							          <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+							        </div>
+							      </div>
+							    </div>
+							  </div>         
+				          </div>          
+				        </div>
+		        	</li>
+		        {% endfor %}
+		        </ul>
+			{% if pending_instructors_info_sp.has_other_pages %}
+			  <ul class="pagination">
+			    {% if pending_instructors_info_sp.has_previous %}
+			      <li><a href="?pi_page={{ pending_instructors_info_sp.previous_page_number }}">&laquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&laquo;</span></li>
+			    {% endif %}
+			    {% for i in pending_instructors_info_sp.paginator.page_range %}
+			      {% if pending_instructors_info_sp.number == i %}
+			        <li class="active"><span>{{ i }} <span class="sr-only">(current)</span></span></li>
+			      {% else %}
+			        <li><a href="?pi_page={{ i }}">{{ i }}</a></li>
+			      {% endif %}
+			    {% endfor %}
+			    {% if pending_instructors_info_sp.has_next %}
+			      <li><a href="?pi_page={{ pending_instructors_info_sp.next_page_number }}">&raquo;</a></li>
+			    {% else %}
+			      <li class="disabled"><span>&raquo;</span></li>
+			    {% endif %}
+			  </ul>
+			{% endif %}
+		</div>
+	</div>
+	
+{% endblock %}

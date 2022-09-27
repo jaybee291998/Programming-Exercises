@@ -1,0 +1,25 @@
+{% extends "profile_base.html"%}
+
+{% block title%}
+	{{ title }}
+{% endblock %}
+
+
+{% block content %}
+	<h1>Edit Profile</h1>
+	{% if profile_empty %}
+		<div class="alert alert-danger">
+			<p>Please complete your profile first before logging in</p>
+		</div>
+	{% endif %}
+	<div>
+		<a href="{{profile_pic}}"><img src="{{profile_pic}}" class="profile-pic avatar"></a><br>
+		<b>Account Type: </b>{% if is_instructor %}Instructor{% else %}Student{% endif %}<br>
+	</div>
+	<form method="POST" enctype="multipart/form-data">
+		{% csrf_token %}
+		{{form.as_p}}
+		<button type="submit" class='btn btn-success'>update</button>
+		{% if not is_instructor %}<a href="{{request_instructorship_link}}" class="btn btn-warning">Request Instructorship</a>{% endif %}
+	</form>
+{% endblock %}

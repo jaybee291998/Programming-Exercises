@@ -1,0 +1,33 @@
+{% extends "base2.html"%}
+
+
+
+{% block content %}
+	{% load static %}
+	<div class="container">
+		<form method="POST" class='form-signin'>
+			<img class="mb-4 img-thumbnail img-fluid" src="{% static 'media/core-logo.png' %}" alt="" width="100" height="100">
+			<h1 class="h3 mb-3 font-weight-normal">Resend Verification Link</h1>
+			{% csrf_token %}
+				{% if form.errors %}
+				    {% for field in form %}
+				        {% for error in field.errors %}
+				            <div class="alert alert-danger">
+				                <strong>{{ error|escape }}</strong>
+				            </div>
+				        {% endfor %}
+				    {% endfor %}
+				    {% for error in form.non_field_errors %}
+				        <div class="alert alert-danger">
+				            <strong>{{ error|escape }}</strong>
+				        </div>
+				    {% endfor %}
+				{% endif %}
+				<div class="form-group">
+					<label for="{{form.email.id_for_label}}" class="sr-only">Email</label>
+					{{form.email}}
+				</div>
+			<button type="submit" name="log" class="mb-4 btn btn-lg btn-primary btn-block">Resend</button>
+		</form>
+	</div>
+{% endblock %}

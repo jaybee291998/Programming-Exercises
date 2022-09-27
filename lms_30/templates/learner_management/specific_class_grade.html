@@ -1,0 +1,157 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+<!-- 			<button type="button" class="btn btn-outline-primary"> Stream</button>
+			<button type="button" class="btn btn-outline-primary">Classwork</button>
+			<button type="button" class="btn btn-outline-primary">People</button>
+			<button type="button" class="btn btn-outline-primary">Grades</button> -->
+			<a href="{{stream_link}}" class="btn btn-primary btn-lg">Stream</a>
+			<a href="{{classwork_link}}" class="btn btn-primary btn-lg">Classwork</a>
+			<a href="{{people_link}}" class="btn btn-primary btn-lg">People</a>
+			<a href="{{grade_link}}" class="btn btn-primary btn-lg active">Grades</a>
+		</div>
+		<div>
+			<h1>Grade Sheet : {{class.name}}</h1>
+			<p id="class_id" hidden="true">{{class_id}}</p>
+			<div id="controls">
+				<!-- for term selection -->
+				<label for='term'>Choose a Term</label>
+				<select id='term' onchange="up(this)">
+					<option value="PRE">Prelim</option>
+					<option value="MID">Midterm</option>
+					<option value="SEM">Semi Finals</option>
+					<option value="FIN">Finals</option>
+				</select>
+
+				<!-- for type of lesson selection -->
+				<label for="type">Type</label>
+				<select id="type" onchange="up(this)">
+					<option value="QZ">Quiz</option>
+					<option value="AS">Assignment</option>
+					<option value="AC">Activity</option>
+					<option value="EX">Exam</option>
+				</select>
+				
+			</div>
+			<hr>
+			<div id="table-div">
+				
+			</div>
+			<button class="btn btn-success" onclick="create_excel()" id="create-excel-btn">Create Excel</button>
+		</div>
+
+	</div>
+	{% load static %}
+	<script type="text/javascript" src="{% static 'js/xlsx.full.min.js' %}"></script>
+	<script type="text/javascript" src="{% static 'js/FileSaver.min.js' %}"></script>
+
+	<script type="text/javascript">
+		const class_id = document.getElementById('class_id').textContent
+		const tableDiv = document.getElementById('table-div')
+
+		const termSelector = document.getElementById('term')
+		const typeSelector = document.getElementById('type')
+
+		const createExelBtn = document.getElementById('create-excel-btn')
+		createExelBtn.style.display = 'None'
+
+		let is_exec = false
+
+		let data = ''
+
+
+		const get_grades = async () =>{
+			const res = await fetch(`{{domain}}/lmsclass/get-grades/${class_id}/`)
+			const data = await res.json()
+			console.log(data[0])
+			return data[0]
+		}
+
+
+		const create_table = data =>{
+			// clear the div table
+			createExelBtn.style.display = 'block'
+			tableDiv.innerHTML = ''
+			const table = document.createElement('table')
+			table.classList.add('table', 'table-bordered', 'table-striped')
+			table.id = 'output-table'
+			// console.log(data)
+			const tableHeadLabel = Object.keys(data[Object.keys(data)[0]])
+			// console.log(tableHeadLabel)
+			const tableHead = document.createElement('tr')
+			const blank = document.createElement('th')
+			blank.innerHTML = 'Name'
+			tableHead.appendChild(blank)
+			tableHeadLabel.forEach(label=>{
+				const newCell = document.createElement('th')
+				newCell.innerHTML = label
+				tableHead.appendChild(newCell)
+			})
+			table.appendChild(tableHead)
+			const tableBody = document.createElement('tbody')
+			
+			grades = data
+			Object.keys(grades).forEach(student_name=>{
+				const newRow = document.createElement('tr')
+				const name = document.createElement('td')
+				name.innerHTML = student_name
+				newRow.appendChild(name)
+				Object.keys(grades[student_name]).forEach(lesson=>{
+					const newCell = document.createElement('td')
+					if(grades[student_name][lesson] != -1){
+						newCell.innerHTML=grades[student_name][lesson]
+					}else{
+						newCell.innerHTML=''
+					}
+					
+					newRow.appendChild(newCell)
+				})
+				tableBody.appendChild(newRow)
+			})
+			table.appendChild(tableBody)
+			tableDiv.appendChild(table)
+
+
+		}
+
+		const up = async () =>{
+			create_table(data[termSelector.value][typeSelector.value])
+		}
+
+
+
+		const get_data = async () =>{
+			if(!is_exec){
+				data = await get_grades()
+				is_exec=true
+			}
+		}
+
+      	// display the initial table
+		get_data()
+
+		const create_excel = () =>{
+			const sheetName = `${termSelector.value} ${typeSelector.value}`
+			const fileName = `${data['class_details']['name']} ${sheetName}.xlsx`
+			const wb = XLSX.utils.table_to_book(document.getElementById('output-table'),{sheet:sheetName})
+			const wbout = XLSX.write(wb, {bookType:'xlsx', type:'binary'})
+
+			saveAs(new Blob([s2ab(wbout)],{type:"application/octet-stream"}), fileName);
+
+		}
+
+		function s2ab(s) {
+            var buf = new ArrayBuffer(s.length);
+            var view = new Uint8Array(buf);
+           	for (var i=0; i<s.length; i++) view[i] = s.charCodeAt(i) & 0xFF;
+            return buf;
+        }
+
+
+
+		
+	</script>
+	
+{% endblock %}

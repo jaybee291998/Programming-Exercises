@@ -1,0 +1,44 @@
+{% extends 'admin_base.html' %}
+{% load widget_tweaks %}
+{% block content %}
+	<h2>Edit Announcement: {{announcement.title}}</h2>
+
+	<div class="content-box">
+		{% for message in messages %}
+			<div class="alert alert-success">
+				{{message}}
+			</div>
+		{% endfor %}
+
+		{% for error in errors %}
+			<div class="alert alert-danger">
+				{{error}}
+			</div>
+		{% endfor %}
+	</div>
+	
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Edit Announcement Form</legend>
+			<!-- {{form.as_p}} -->
+			<!-- name -->
+			<div class="form-group">
+				{{form.title.errors}}
+				{{form.title.label_tag}}
+				{{form.title}}
+				
+			</div>
+			<!-- description-->
+			<div class="form-group">
+				{{form.description.errors}}
+				{{form.description.label_tag}}
+				{{form.description}}
+				
+			</div>
+
+		</fieldset>	
+		<button type="submit" class="btn btn-success btn-lg" id='btn'>Update</button>
+		
+	</form>
+{% endblock %}

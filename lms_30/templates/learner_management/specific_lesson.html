@@ -1,0 +1,91 @@
+{% extends 'base3.html' %}
+{% block content %}
+<div>
+	<div class="flex-grid">
+		<div class='type content-box'>
+			{% load static %}
+						        
+			{% if lesson.type_of_lesson == 'QZ' %}
+				<img class="type-log" src="{% static 'media/logo/quiz-logo.png' %}">
+			{% elif lesson.type_of_lesson == 'AS' %}
+				<img class="type-log" src="{% static 'media/logo/assignment-logo.png' %}">
+			{% elif lesson.type_of_lesson == 'AC' %}
+				<img class="type-log" src="{% static 'media/logo/activity-logo.png' %}">
+			{% else %}
+				<img class="type-log" src="{% static 'media/logo/exam-logo.png' %}">
+			{% endif %}
+
+			<!-- <img src="{% static 'media/logo/quiz-logo.png' %}" class="type-log"> -->
+		</div>
+		<div class="content content-box lesson-header">
+			<h2>{{lesson.type_of_lesson}}# {{lesson.num}}: {{lesson.title}}</h2>
+		</div>
+	</div>
+	<p class="text-muted">{{instructor_name}} &middot; {{lesson.timestamp}}</p>
+	<div class="flex-grid">
+		<div class='name'>
+			<b>Total Points: {{lesson.total_mark}}</b>
+		</div>
+		<div class="buttons">
+			<b>Due: {{deadline_date}}</b>
+		</div>
+	</div>
+	<hr>
+	
+	
+	<p>{{lesson.description}}</p>
+
+	<div class='content-box'>
+		<b>Files:</b>
+		<ul class="list-group">
+			{% for lfi in lesson_files_info %}
+				<li><a href="{{lfi.1}}"  class="list-group-item">{{lfi.0}}</a></li>
+			{% endfor %}
+		</ul>
+		{% if not is_class_instructor %}
+		<a href="{{add_lesson_file_link}}" role='button' class="btn btn-primary">Add lesson file</a>
+		<a href="{{edit_lesson_link}}" role='button' class="btn btn-success">Edit</a>
+
+
+		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id">Delete</button> 
+		<!-- Modal -->
+		<div class="modal fade" id="id" role="dialog">
+			<div class="modal-dialog">
+						    
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Delete {{lesson.type_of_lesson}}</h4>
+					</div>
+					<div class="modal-body">
+						<!-- <p>Some text in the modal.</p> -->
+						<h4>Are you sure you want to delete '{{lesson.type_of_lesson}}# {{lesson.num}}: {{lesson.title}}'</h4>
+						<p>All the files and student work will be deleted and will never be recorvered again.</p>
+					</div>
+					<div class="modal-footer">
+						<a href="{{delete_lesson_link}}" role='button' class="btn btn-danger">Delete</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+						      
+			</div>
+		</div>  
+		{% endif %}
+		<a href="{{go_back_link}}" role='button' class="btn btn-warning">Go Back</a>
+	</div>
+
+</div>
+<div>
+	<h2>Student Work</h2>
+	{% if is_class_instructor %}
+		<a href="{{student_work_link}}" role='button' class="btn btn-success">Submit Your Work</a>
+	{% else %}
+	<ul class="list-group">
+		{% for student_work in student_works_links %}
+			<li class="list-group-item"><a href="{{student_work.1}}" >{{student_work.0}}</a> <small>{{student_work.2}}</small>{% if student_work.3 %}<small class="label label-danger">late</small>{% endif %}</li>
+		{% endfor %}
+	</ul>
+	{% endif %}
+</div>
+{% endblock %}

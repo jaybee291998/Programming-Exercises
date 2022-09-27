@@ -1,0 +1,40 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+<h1>{{message}}</h1>
+
+<div>
+		<h3>Public Comments</h3>
+		<ul class="list-group">
+			{% for comment in comment_info %}
+				<li class="list-group-item">
+					<div class='profile-box'>
+						<div class="img">
+							<img src="{{comment.3}}" class="avatar">
+						</div>
+						<div class="name">
+							<b class='name'>{{comment.0}}</b>
+						</div>
+					</div>
+					<div class="content-box">
+						<p>{{comment.1}}</p>
+					</div>
+					<div class="content-box">
+						<small>{{comment.2}}</small>
+					</div>
+				</li>
+			{% endfor %}
+		</ul>
+	</div>
+
+	<form method="POST">
+		{% csrf_token %}
+		<legend>Comment</legend>
+			{{commentform.as_p}}
+			<input type="submit" name="{{commentform.prefix}}" value="Comment" class="btn btn-success" />
+	</form>
+
+	
+</div>
+
+{% endblock %}

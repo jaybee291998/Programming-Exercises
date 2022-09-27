@@ -1,0 +1,33 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class="alert alert-danger">
+		<h1>Delete {{class.name}}</h1>
+	</div>
+
+	<h3>Please enter your password to delete the class</h3>
+	<form method="POST">
+		{% csrf_token %}
+		<legend>Password</legend>
+		<fieldset>
+			{{form.as_p}}
+		</fieldset>
+		<input type="submit" name="delete" button='Delete' class="btn btn-danger" value="delete">
+		<a href="{{go_back_link}}" role='button' class="btn btn-success">go back</a>
+	</form>
+
+	<div class="content-box">
+		{% for message in messages %}
+			<div class="alert alert-success">
+				{{message}}
+			</div>
+		{% endfor %}
+
+		{% for error in errors %}
+			<div class="alert alert-danger">
+				{{error}}
+			</div>
+		{% endfor %}
+	</div>
+	
+{% endblock %}

@@ -1,0 +1,25 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	{% if errors %}
+	<ul>
+		{% for error in errors %}
+		<div class="alert alert-danger">
+			<li>{{error}}</li>
+		</div>
+		{% endfor %}
+	</ul>
+	{% endif %}
+
+	<form method="POST">
+		{% csrf_token %}
+		<fieldset>
+			<legend>Invitation Form</legend>
+			{{form.as_p}}
+			<button type="submit" class='btn btn-primary'>Invite</button>
+			<a href="{{student_search_link}}" role='button' class="btn btn-success">Search Student</a>
+		</fieldset>
+	</form>
+	<h4>Join Link: {{link}}</h4>
+
+{% endblock %}

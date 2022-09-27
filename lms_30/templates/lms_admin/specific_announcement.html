@@ -1,0 +1,57 @@
+{% extends 'admin_base.html' %}
+{% block content %}
+<div>
+	<div class="flex-grid">
+		<div class='type content-box'>
+			{% load static %}
+			<img src="{% static 'media/logo/quiz-logo.png' %}" class="type-log">
+		</div>
+		<div class="content content-box lesson-header">
+			<h2>Announcement: {{announcement.title}}</h2>
+		</div>
+	</div>
+	<p class="text-muted">{{announcement.author.profile.get_fullname}} &middot; {{announcement.timestamp}}</p>
+	<hr>
+
+	<p>{{announcement.description}}</p>
+
+	<div class='content-box'>
+		<a href="{{add_announcement_image_link}}" role='button' class="btn btn-primary">Add image</a>
+		<a href="{{edit_announcement_link}}" role='button' class="btn btn-success">Edit</a>
+		<button type="button" class="btn btn-danger" data-toggle="modal" data-target="#id">Delete</button> 
+		<!-- Modal -->
+		<div class="modal fade" id="id" role="dialog">
+			<div class="modal-dialog">
+						    
+				<!-- Modal content-->
+				<div class="modal-content">
+					<div class="modal-header">
+						<button type="button" class="close" data-dismiss="modal">&times;</button>
+						<h4 class="modal-title">Delete {{lesson.type_of_lesson}}</h4>
+					</div>
+					<div class="modal-body">
+						<!-- <p>Some text in the modal.</p> -->
+						<h4>Are you sure you want to delete 'Announcement: {{announcement.title}}'</h4>
+						<p>All the images will be delted and will never be recovered</p>
+					</div>
+					<div class="modal-footer">
+						<a href="{{delete_announcement_link}}" role='button' class="btn btn-danger">Delete</a>
+						<button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+					</div>
+				</div>
+						      
+			</div>
+		</div>  
+		<a href="{{go_back_link}}" role='button' class="btn btn-warning">Go Back</a>
+	</div>
+	<br>
+	<b>Images:</b>
+	<ul class="list-group">
+		{% for lfi in announcement_images_info %}
+			<li><a href="{{lfi.1}}"><img src="{{lfi.1}}" name="{{lfi.0}}" class="box-img"></a></li>
+
+		{% endfor %}
+	</ul>	
+
+</div>
+{% endblock %}

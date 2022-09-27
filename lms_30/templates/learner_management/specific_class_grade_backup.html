@@ -1,0 +1,115 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+<!-- 			<button type="button" class="btn btn-outline-primary"> Stream</button>
+			<button type="button" class="btn btn-outline-primary">Classwork</button>
+			<button type="button" class="btn btn-outline-primary">People</button>
+			<button type="button" class="btn btn-outline-primary">Grades</button> -->
+			<a href="{{stream_link}}" class="btn btn-primary btn-lg">Stream</a>
+			<a href="{{classwork_link}}" class="btn btn-primary btn-lg">Classwork</a>
+			<a href="{{people_link}}" class="btn btn-primary btn-lg">People</a>
+			<a href="{{grade_link}}" class="btn btn-primary btn-lg active">Grades</a>
+		</div>
+		<div>
+			<h1>Welcome to gradesheet</h1>
+			{{domain}}
+			<p id="class_id">{{class_id}}</p>
+			<div id="controls">
+				<!-- for term selection -->
+				<label for='term'>Choose a Term</label>
+				<select id='term' onchange="up(this)">
+					<option value="PRE">Prelim</option>
+					<option value="MID">Midterm</option>
+					<option value="SEM">Semi Finals</option>
+					<option value="FIN">Finals</option>
+				</select>
+
+				<!-- for type of lesson selection -->
+				<label for="type">Type</label>
+				<select id="type" onchange="up(this)">
+					<option value="QZ">Quiz</option>
+					<option value="AS">Assignment</option>
+					<option value="AC">Activity</option>
+					<option value="EX">Exam</option>
+				</select>
+				
+			</div>
+			<div id="table-div">
+				
+			</div>
+		</div>
+
+	</div>
+
+	<script type="text/javascript">
+		const class_id = document.getElementById('class_id').textContent
+		const tableDiv = document.getElementById('table-div')
+
+		const termSelector = document.getElementById('term')
+		const typeSelector = document.getElementById('type')
+		const get_grades = async () =>{
+			const res = await fetch(`{{domain}}/lmsclass/get-grades/${class_id}/`)
+			const data = await res.json()
+			return data
+
+			
+		}
+
+
+		const create_table = data =>{
+			// clear the div table
+			tableDiv.innerHTML = ''
+			const table = document.createElement('table')
+			table.classList.add('table', 'table-bordered', 'table-striped')
+			// console.log(data)
+			const tableHeadLabel = Object.keys(data[Object.keys(data)[0]])
+			// console.log(tableHeadLabel)
+			const tableHead = document.createElement('tr')
+			const blank = document.createElement('th')
+			blank.innerHTML = 'Name'
+			tableHead.appendChild(blank)
+			tableHeadLabel.forEach(label=>{
+				const newCell = document.createElement('th')
+				newCell.innerHTML = label
+				tableHead.appendChild(newCell)
+			})
+			table.appendChild(tableHead)
+			const tableBody = document.createElement('tbody')
+			
+			grades = data
+			Object.keys(grades).forEach(student_name=>{
+				const newRow = document.createElement('tr')
+				const name = document.createElement('td')
+				name.innerHTML = student_name
+				newRow.appendChild(name)
+				Object.keys(grades[student_name]).forEach(lesson=>{
+					const newCell = document.createElement('td')
+					newCell.innerHTML=grades[student_name][lesson]
+					newRow.appendChild(newCell)
+				})
+				tableBody.appendChild(newRow)
+			})
+			table.appendChild(tableBody)
+			tableDiv.appendChild(table)
+
+
+		}
+		const data = get_grades()
+		const a = async (term, lesson_type) =>{
+			const data = await get_grades()
+			create_table(data[0][term][lesson_type])
+		}
+		// create_table(data[0])
+		// a('PRE','AC')
+
+		const up = async () =>{
+			// console.log('Term: ', termSelector.value)
+			// console.log('Type: ', typeSelector.value)
+			a(termSelector.value, typeSelector.value)
+		}
+		
+	</script>
+	
+{% endblock %}

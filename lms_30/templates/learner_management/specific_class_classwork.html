@@ -1,0 +1,82 @@
+{% extends 'base3.html' %}
+
+{% block content %}
+	<div class='container'>
+		<div class="button-group button-group-lg" role='group' aria-label='Basic Outlined Example'>
+			<a href="{{stream_link}}" class="btn btn-primary btn-lg ">Stream</a>
+			<a href="{{classwork_link}}" class="btn btn-primary btn-lg active">Classwork</a>
+			<a href="{{people_link}}" class="btn btn-primary btn-lg">People</a>
+			{% if is_instructor %}
+				<a href="{{grade_link}}" class="btn btn-primary btn-lg">Grades</a>
+			{% endif %}
+		</div>
+
+		<!-- Class Banner -->
+		<div>
+			<div class="">
+				
+			</div>
+
+			<h3>Lessons</h3>
+			{% if is_instructor %}
+				<a role='button' href="{{add_new_lesson_link}}" class="btn btn-primary btn-lg">+ Add</a>
+			{% endif %}
+			<ul class="list-group">
+				{% for li in lessons_info %}
+					<li class="list-group-item classwork-header">
+						<div class="accordion" id="accordionExample">
+						        <div class="card">
+						            <div class="card-header" id="headingOne">
+						                <h2 class="mb-0">
+						                    <a role="button" class="btn btn-link btn-block" data-toggle="collapse" data-target="#id{{li.6}}">
+						                      <!-- <p>Assignment | Name | Due</p> -->
+						                        <div class="">
+						                          <p>{{li.2}}# {{li.8}} | {{li.0}} | {{li.3}}
+						                          	{% if not is_instructor %}
+						                          		| {{li.13}}
+						                       		{% endif %}</p>                          
+						                        </div>
+						                    </a>                  
+						                </h2>
+						            </div>
+
+						            <div id="id{{li.6}}" class="collapse" aria-labelledby="headingOne" data-parent="#accordionExample">
+						              <div class="flex-grid">
+						                <div class="col assign-info">
+						                  <!-- <img src="images/assignment-logo.png" class="img-thumbnail round type-logo"> -->
+						                  <div class="date-posted">
+						                    <small>Date Posted: {{li.7}}</small>
+						                    <p>Instruction: {{li.4}}</p>
+						                  </div>
+						                  <ul class="list-group">
+						                  	{% for lesson_file in li.5 %}
+						                    	<li class="list-group-item"><a href="{{lesson_file.file.url}}">{{lesson_file.file.name}}</a></li>
+						                  	{% endfor %}
+
+						                    <!-- <li class="list-group-item"><a href="#">Lorem ipsum dolor sit amet.</a></li>
+						                    <li class="list-group-item"><a href="#">Lorem ipsum dolor sit amet.</a></li> -->
+						                  </ul>
+						                </div>
+						                {% if is_instructor %}
+						                <div class="col assign-stat">
+						                  <div class='stats'>
+						                    <b>Assigned: {{assigned}}</b><br>
+						                    <b>Handed in: {{li.9}}</b><br>
+						                    <b>Marked: {{li.10}}</b><br>
+						                    <b>Late: {{li.11}}</b><br>
+						                    <b>Missing: {{li.12}}</b><br>
+						                  </div>
+						                </div>
+						                {% endif %}
+						              </div>
+						                  <a role='button' class="btn btn-primary btn-lg" href="{{li.1}}">View {{li.2}}</a>
+						            </div>
+						        </div>
+						    </div>
+					</li>
+				{% endfor %}
+			</ul>
+		</div>
+	</div>
+	
+{% endblock %}

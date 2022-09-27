@@ -1,0 +1,24 @@
+{% extends 'base3.html' %}
+
+{% load static %}
+
+{% block content %}
+	<div class="container">
+		<div class="banner" style="background-image: url({{class.lmsclassinfo.banner_bg.url}})">
+			<div class="txt">
+				<h2>{{class.name}}</h2>
+				<b>{{class.instructor.profile.get_fullname}}</b><br>			
+			</div>
+		</div>
+		<div class="alert alert-warning">
+			<p><b>Reminder</b>: Please select a banner that will contrast with a black and blue text</p>
+		</div>
+		<form method="POST" enctype="multipart/form-data">
+			{% csrf_token %}
+			{{form.as_p}}
+			<button type="submit" class="btn btn-success">update</button>
+			<a href="{{stream_link}}" class="btn btn-warning">Go back</a>
+		</form>
+	</div>
+
+{% endblock %}
